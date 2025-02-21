@@ -1,14 +1,32 @@
-function analisar(){
-    var email = document.getElementById("email");
-    var senha = document.getElementById("senha");
+async function verificar_usuario(username, password){
+    const response = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: username,
+            password : password
+        })
+    });
 
-    var array = [email,senha];
+    const data = await responde.json();
 
-    for(var i = 0; i < array.length; i++){
-        if(array[i].value == ""){
-            array[i].style.borderColor = "red";
-        }else{
-            array[i].style.borderColor = "green";
-        }
+    if(response.ok){
+        console.log("Login efetuado com sucesso!", data)
+
+        localStorage.setItem('authToken', data.token);
+    }else {
+        console.log("Erro ao realizar login: ", data.message)
     }
 }
+
+document.getElementById("form-login").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const username = document.getElementById("user").value;
+    const password = document.getElementById("password").value;
+
+    verificar_usuario(username, password);
+
+    document.getElementById("form-login").reset()
+})
