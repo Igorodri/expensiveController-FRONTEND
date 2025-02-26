@@ -18,9 +18,23 @@ async function verificar_usuario(username, password){
 
         setTimeout(
             window.location.href = 'Controlador.html'
-        ),2000
+        ),4000
 
     }else{
+        Toastify({
+            text: "Usuário não encontrado",
+            duration: 5000,
+            destination: "",
+            newWindow: true,
+            close: true,
+            gravity: "top",
+            position: "center", 
+            stopOnFocus: true, 
+            style: {
+              background: "linear-gradient(to right,rgb(206, 19, 19),rgb(188, 29, 29))"
+            },
+            onClick: function(){} 
+          }).showToast();
         console.error("Erro ao logar", data.error)
     }
 

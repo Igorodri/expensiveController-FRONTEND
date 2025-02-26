@@ -99,6 +99,7 @@ form .btn{
     width: 200px;
     border:none;
     margin-bottom: 20px;
+    cursor: pointer;
 }
 
 form .btn:hover{

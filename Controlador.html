@@ -3,64 +3,69 @@
 <head>
     <meta charset="UTF-8"> 
     <link rel="stylesheet" href="CSS/controlador.css">
-    <title>Controlador de Gastos</title>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <link rel="shortcut icon" href="IMG/" type="image/x-icon">
+
+    <link rel="shortcut icon" href="IMG/logo.png" type="image/x-icon">
+    <title>Scale Cash</title>
 </head>
 <body>
-    <main>
-
-        <div id="container">
-
-            <table id="table_2" border="1">
-
-                <tr>
-                    <th>Saldo Atual</th>
-                    <th>Total de linhas</th>
-                    <th>Total de Despesas</th>
-                </tr>
-
-                <tr>
-                    <td><p id="sale">0</p></td>
-                    <td><p id="linhas">1</p></td>
-                    <td><p id="despesas">0</p></td>
-                </tr>
-                
-       
-            </table>
-
-            <div id="area_remove_add">   
-                <input type="number" placeholder="Adicione seus ganhos" id="saldo_add">
-                <input type="button" value="Atualizar" class="button_att" onclick="add_cash()"><br>
-
-                <input type="number" placeholder="Decrementar um valor" id="saldo_remove">
-                <input type="button" value="Atualizar" class="button_att" onclick="remove_cash()">
+        <header>
+            <div class="logo">
+                <img src="IMG/logo.png" alt="Logo Empresa">
             </div>
-            
-            <br>
 
-            <table border="1" id="tabela">
-                <tr>
-                    <th>Linha</th>
-                    <th>Data da Aplicação</th>
-                    <th>Nome da Aplicação</th>
-                    <th>Valor da Aplicação</th>
-                </tr>
-                <tr>
-                    <td><p id="numero"></p></td>
-                    <td><input type="date" class="date_application" name="date_application"></td>
-                    <td><input type="text" placeholder="Insira o nome da Aplicação" class="name_application" name="name_ap"></td>
-                    <td><input type="number" placeholder="Insira o valor da Aplicação" class="value_application" name="value_ap" value="0"></td>
-                   
-                </tr>
-                <input type="button" value="+" onclick="plus()" class="button">
-                <input type="button" value="-" onclick="minus()" class="button">
-                <input type="button" value="x" onclick="deleteall   ()" class="button">
-                
-              
+            <div class="opcoes">
+                <div class="user">
+                    <img src="IMG/user.svg" alt="">
+                </div>
+            </div>
+        </header>
 
+        <main>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Categoria de gasto</th>
+                        <th>O que foi gasto</th>
+                        <th>Quanto foi gasto</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <select class="categoria">
+                                <option  value="conta_imovel" selected>Conta Imóvel</option>
+                                <option value="Parcela"></option>
+                            </select>
+                        </td>
+                        <td><input type="text" value="Conta de luz"></td>
+                        <td><input type="number" value="120,00"></td>
+
+                        <td class="status">
+                            <select>
+                                <option value="1" selected>Ativo</option>
+                                <option value="0">Inativo</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                </tbody>
             </table>
-            
-        </div>
+        
+            <button class="save-btn">Salvar Alterações</button>
+        </main>
+
+        <footer>
+
+        </footer>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="JS/controlador.js"></script>
 </body>
 </html>
