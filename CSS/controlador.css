@@ -33,15 +33,45 @@ header{
     margin-top: 15px;
 }
 
-
-.user{
-
-}
-
 .user img{
     width: 50px;
     height: 50px;
     margin-right: 15px;
+    cursor: pointer;
+}
+
+.user img:hover{
+    background-color: rgba(251, 249, 249, 0.534);
+    border-radius: 100%;
+}
+
+.user-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 70px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 150px;
+    overflow: hidden;
+}
+
+.user-menu span {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    transition: background 0.3s;
+}
+
+.user-menu span:hover {
+    background: #dbd9d9;
+}
+
+.user-menu #sair:hover{
+    background-color: red;
+    color: white;
 }
 
 main{
@@ -91,6 +121,8 @@ input {
     text-align: center;
 }
 
+
+
 .status {
     text-align: center;
 }
@@ -123,4 +155,30 @@ input {
 }
 .save-btn:hover {
     background-color: #218838;
+}
+
+.delete-btn {
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.delete-btn:hover {
+    background-color: #a80000;
+}
+
+.add-btn {
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #c98620;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.add-btn:hover {
+    background-color: #996619;
 }

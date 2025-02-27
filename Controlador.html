@@ -19,7 +19,12 @@
 
             <div class="opcoes">
                 <div class="user">
-                    <img src="IMG/user.svg" alt="">
+                    <img src="IMG/user.svg" alt="User" id="user-profile">
+                </div>
+                <div class="user-menu" id="user-menu">
+                    <span id="profile">Perfil</span>
+                    <span id="config">Configurações</span>
+                    <span id="sair">Sair</span>
                 </div>
             </div>
         </header>
@@ -39,12 +44,26 @@
                     <tr>
                         <td>
                             <select class="categoria">
-                                <option  value="conta_imovel" selected>Conta Imóvel</option>
-                                <option value="Parcela"></option>
+                                <option value="none" selected disabled></option>
+                                <option value="conta_imovel">Conta Imóvel</option>
+                                <option value="parcela">Parcela</option>
+                                <option value="alimentacao">Alimentação</option>
+                                <option value="transporte">Transporte</option>
+                                <option value="saude">Saúde</option>
+                                <option value="educacao">Educação</option>
+                                <option value="lazer">Lazer</option>
+                                <option value="assinaturas">Assinaturas</option>
+                                <option value="vestuario">Vestuário</option>
+                                <option value="contas_energia">Conta de Energia</option>
+                                <option value="contas_agua">Conta de Água</option>
+                                <option value="internet">Internet</option>
+                                <option value="telefone">Telefone</option>
+                                <option value="outros">Outros</option>
                             </select>
+                            
                         </td>
-                        <td><input type="text" value="Conta de luz"></td>
-                        <td><input type="number" value="120,00"></td>
+                        <td><input type="text"></td>
+                        <td><input type="number"></td>
 
                         <td class="status">
                             <select>
@@ -56,8 +75,13 @@
 
                 </tbody>
             </table>
-        
-            <button class="save-btn">Salvar Alterações</button>
+            
+            <div class="btns">
+                <button class="save-btn">Salvar Alterações</button>
+                <button class="delete-btn">Deletar registro</button>
+                <button class="add-btn">Adicionar Registro</button>
+            </div>
+
         </main>
 
         <footer>
@@ -66,6 +90,6 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script src="JS/controlador.js"></script>
+    <script src="JS/controller.js"></script>
 </body>
 </html>
