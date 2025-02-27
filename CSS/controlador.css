@@ -13,6 +13,7 @@ header{
     display: flex;
     justify-content: space-between;
     align-items: start;
+    margin-top: 10px;
 }
 
 .logo{
@@ -63,6 +64,7 @@ header{
     text-decoration: none;
     color: #333;
     transition: background 0.3s;
+    cursor: pointer;
 }
 
 .user-menu span:hover {
@@ -83,12 +85,13 @@ main{
 
 table {
     width: 80%;
-    margin: 20px auto;
+    margin: 15px auto;
     border-collapse: collapse;
     background: white;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
 }
 th, td {
     padding: 12px;
@@ -104,12 +107,16 @@ th {
 tr:hover {
     background-color: #f1f1f1;
 }
+
 input {
     width: 100%;
     padding: 5px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    text-align: center;
+}
+
+#number{
+    width: 60%;
 }
 
 .categoria{
@@ -120,8 +127,6 @@ input {
     border-radius: 5px;
     text-align: center;
 }
-
-
 
 .status {
     text-align: center;
@@ -144,41 +149,53 @@ input {
     color: red;
     font-weight: bold;
 }
-.save-btn {
-    margin-top: 15px;
-    padding: 10px 15px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.save-btn:hover {
-    background-color: #218838;
+
+
+.btns{
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
 }
 
-.delete-btn {
-    margin-top: 15px;
+.btn {
     padding: 10px 15px;
-    background-color: #ff0000;
-    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
-.delete-btn:hover {
+
+#delete-btn{
+    background-color: #ff0000;
+    color: white;
+}
+
+#delete-btn:hover {
     background-color: #a80000;
 }
 
-.add-btn {
-    margin-top: 15px;
-    padding: 10px 15px;
+
+#save-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+#save-btn:hover {
+    background-color: #218838;
+}
+
+#add-btn {
     background-color: #c98620;
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
 }
-.add-btn:hover {
+
+#add-btn:hover {
     background-color: #996619;
+}
+
+#date-btn{
+    width: 400px;
+    height: 40px;
+    text-align: center;
 }

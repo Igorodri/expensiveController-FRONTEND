@@ -6,8 +6,6 @@
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
-    <link rel="shortcut icon" href="IMG/" type="image/x-icon">
-
     <link rel="shortcut icon" href="IMG/logo.png" type="image/x-icon">
     <title>Scale Cash</title>
 </head>
@@ -31,9 +29,21 @@
 
         <main>
 
-            <table>
+            <div class="btns">
+                <input type="date" id="date-btn">
+
+                <div>
+                    <button class="btn" id="save-btn">Salvar Alterações</button>
+                    <button class="btn" id="delete-btn">Deletar registro</button>
+                    <button class="btn" id="add-btn">Adicionar Registro</button>
+                </div>
+
+            </div>
+
+            <table id="table_cash">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Categoria de gasto</th>
                         <th>O que foi gasto</th>
                         <th>Quanto foi gasto</th>
@@ -42,6 +52,9 @@
                 </thead>
                 <tbody>
                     <tr>
+                        <td>
+                            <p>1</p>
+                        </td>
                         <td>
                             <select class="categoria">
                                 <option value="none" selected disabled></option>
@@ -62,8 +75,8 @@
                             </select>
                             
                         </td>
-                        <td><input type="text"></td>
-                        <td><input type="number"></td>
+                        <td><input type="text" id="text_cash"></td>
+                        <td><input type="number" id="number"></td>
 
                         <td class="status">
                             <select>
@@ -75,13 +88,7 @@
 
                 </tbody>
             </table>
-            
-            <div class="btns">
-                <button class="save-btn">Salvar Alterações</button>
-                <button class="delete-btn">Deletar registro</button>
-                <button class="add-btn">Adicionar Registro</button>
-            </div>
-
+        
         </main>
 
         <footer>
