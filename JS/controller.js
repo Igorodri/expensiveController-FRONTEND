@@ -1,77 +1,99 @@
-//Controller
-function add_registro() {
-    const tabela = document.getElementById("table_cash").getElementsByTagName('tbody')[0];
-    const newRow = tabela.insertRow();
-
-    newRow.innerHTML = `
-                        <td>
-                            <p>1</p>
-                        </td>
-                        <td>
-                            <select class="categoria">
-                                <option value="none" selected disabled></option>
-                                <option value="conta_imovel">Conta Imóvel</option>
-                                <option value="parcela">Parcela</option>
-                                <option value="alimentacao">Alimentação</option>
-                                <option value="transporte">Transporte</option>
-                                <option value="saude">Saúde</option>
-                                <option value="educacao">Educação</option>
-                                <option value="lazer">Lazer</option>
-                                <option value="assinaturas">Assinaturas</option>
-                                <option value="vestuario">Vestuário</option>
-                                <option value="contas_energia">Conta de Energia</option>
-                                <option value="contas_agua">Conta de Água</option>
-                                <option value="internet">Internet</option>
-                                <option value="telefone">Telefone</option>
-                                <option value="outros">Outros</option>
-                            </select>
-                            
-                        </td>
-                        <td><input type="text" id="text_cash"></td>
-                        <td><input type="number" id="number"></td>
-           
-    `;
+//Verificação de Autenticação
+function verificarAutenticacao() {
+    const token = localStorage.getItem('token'); 
+    if (!token) {
+        alert("Você precisa estar logado para acessar esta página.");
+        window.location.href = 'index.html'; 
+}
 }
 
-document.getElementById('add-btn').addEventListener("click", add_registro)
+// Lista de registros
+async function lista() {
+    const token = localStorage.getItem('token');
 
+    if (!token) {
+        Toastify({
+            text: "Usuário não autenticado. Faça login novamente",
+            duration: 5000,
+            gravity: "top",
+            position: "center",
+            close: true,
+            stopOnFocus: true,
+            style: {
+                background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
+            }
+        }).showToast();
+        return;
+    }
 
-
-
-async function save_cash(expensive_category, expensive_spent, expensive_cash) {
     try {
-        const response = await fetch('http://localhost:3000/salvar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                expensive_category: expensive_category,
-                expensive_spent: expensive_spent,
-                expensive_cash: expensive_cash
-            }),
-            credentials: 'include'
+        const response = await fetch('http://localhost:3000/lista', {
+            method: 'GET',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`  
+            },
         });
 
         const datas = await response.json();
 
         if (response.ok) {
-            console.log("Registro salvo com sucesso", datas);
+            console.log("Registros listados com sucesso", datas);
 
-            Toastify({
-                text: "Registros Salvos com sucesso!",
-                duration: 5000,
-                gravity: "top",
-                position: "center",
-                close: true,
-                stopOnFocus: true,
-                style: {
-                    background: "linear-gradient(to right, rgb(19, 206, 31), rgb(50, 188, 29))"
-                }
-            }).showToast();
+            if (datas.data && datas.data.length > 0) {
+                const tabela = document.getElementById("table_cash").getElementsByTagName('tbody')[0];
+                
+                tabela.innerHTML = '';
+
+                datas.data.forEach(record => {
+                    const newRow = tabela.insertRow();
+                    newRow.innerHTML = `
+                        <td>
+                            <p id="expensive_id">${record.id}</p>
+                        </td>
+                        <td>
+                            <select class="categoria" name="expensive_category">
+                                <option value="none" class="expensive_category" selected disabled></option>
+                                <option value="conta_imovel" class="expensive_category" ${record.expensive_category === 'conta_imovel' ? 'selected' : ''}>Conta Imóvel</option>
+                                <option value="parcela" class="expensive_category" ${record.expensive_category === 'parcela' ? 'selected' : ''}>Parcela</option>
+                                <option value="alimentacao" class="expensive_category" ${record.expensive_category === 'alimentacao' ? 'selected' : ''}>Alimentação</option>
+                                <option value="transporte" class="expensive_category" ${record.expensive_category === 'transporte' ? 'selected' : ''}>Transporte</option>
+                                <option value="saude" class="expensive_category" ${record.expensive_category === 'saude' ? 'selected' : ''}>Saúde</option>
+                                <option value="educacao" class="expensive_category" ${record.expensive_category === 'educacao' ? 'selected' : ''}>Educação</option>
+                                <option value="lazer" class="expensive_category" ${record.expensive_category === 'lazer' ? 'selected' : ''}>Lazer</option>
+                                <option value="assinaturas" class="expensive_category" ${record.expensive_category === 'assinaturas' ? 'selected' : ''}>Assinaturas</option>
+                                <option value="vestuario" class="expensive_category" ${record.expensive_category === 'vestuario' ? 'selected' : ''}>Vestuário</option>
+                                <option value="contas_energia" class="expensive_category" ${record.expensive_category === 'contas_energia' ? 'selected' : ''}>Conta de Energia</option>
+                                <option value="contas_agua" class="expensive_category" ${record.expensive_category === 'contas_agua' ? 'selected' : ''}>Conta de Água</option>
+                                <option value="internet" class="expensive_category" ${record.expensive_category === 'internet' ? 'selected' : ''}>Internet</option>
+                                <option value="telefone" class="expensive_category" ${record.expensive_category === 'telefone' ? 'selected' : ''}>Telefone</option>
+                                <option value="outros" class="expensive_category" ${record.expensive_category === 'outros' ? 'selected' : ''}>Outros</option>
+                            </select>
+                        </td>
+                        <td><input type="text" class="expensive_spent"  value="${record.expensive_spent}"></td>
+                        <td><input type="number" class="expensive_cash" value="${record.expensive_cash}"></td>
+                    `;
+                });
+
+            } else {
+                Toastify({
+                    text: "Nenhum registro encontrado",
+                    duration: 5000,
+                    gravity: "top",
+                    position: "center",
+                    close: true,
+                    stopOnFocus: true,
+                    style: {
+                        background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
+                    }
+                }).showToast();
+            }
+
         } else {
-            console.error("Erro ao salvar registros", datas?.error || "Erro desconhecido");
+            console.error("Erro ao listar registros", datas?.error || "Erro desconhecido");
 
             Toastify({
-                text: datas?.error || "Erro ao salvar registros",
+                text: "Erro ao listar registros",
                 duration: 5000,
                 gravity: "top",
                 position: "center",
@@ -100,14 +122,88 @@ async function save_cash(expensive_category, expensive_spent, expensive_cash) {
 }
 
 
-document.getElementById("save-btn").addEventListener("click", () => {
-    const expensive_category = document.getElementById("expensive_category").value;
-    const expensive_spent = document.getElementById("expensive_spent").value;
-    const expensive_cash = document.getElementById("expensive_cash").value;
+//Adicionar - Em produção
+async function adicionar_cash(expensive_category, expensive_spent, expensive_cash) {
+    const token = localStorage.getItem('token')
 
-    save_cash(expensive_category,expensive_spent,expensive_cash)
+    if(!token){
+        Toastify({
+            text: "Usuário não autenticado. Faça login novamente",
+            duration: 5000,
+            gravity: "top",
+            position: "center",
+            close: true,
+            stopOnFocus: true,
+            style: {
+                background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
+            }
+        }).showToast();
+        return;
+    }
 
-})
+    try{
+        const response = await fetch('http://localhost:3000/adicionar', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`  
+            },
+        })
+
+        const datas = await response.json();
+
+        if(response.ok){
+            console.log("Adicionando Registro ao banco de dados", datas);
+
+
+
+            return res.status(200).json({message: 'Registros adicionados com sucesso!'})
+        }else{
+            console.log("Não foi possível adicionar o registro", datas.error);
+
+            Toastify({
+                text: "Não foi possível adicionar o registro",
+                duration: 5000,
+                gravity: "top",
+                position: "center",
+                close: true,
+                stopOnFocus: true,
+                style: {
+                    background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
+                }
+            }).showToast();
+
+            return res.status(401).json({error: 'Não foi possível adicionar o registro'})
+        }
+
+    }catch(error){
+        console.error('Erro interno no servidor');
+
+        Toastify({
+            text: "Erro interno no servidor",
+            duration: 5000,
+            gravity: "top",
+            position: "center",
+            close: true,
+            stopOnFocus: true,
+            style: {
+                background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
+            }
+        }).showToast();
+
+        return res.status(500).json({error: 'Erro interno no servidor'})
+
+    }
+}
+
+// document.getElementById('concluir').addEventListener("click", () =>{
+    
+// })
+
+
+verificarAutenticacao();
+lista();
+
 
 
 

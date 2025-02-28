@@ -6,37 +6,42 @@ async function verificar_usuario(username, password){
         headers: {'Content-Type': 'application/json'},
         body:JSON.stringify({
             username: username,
-            password: password
+            password: password,
+
         }),
-        credentials: 'include'
     });
 
     const data = await response.json()
 
-    if(response.ok){
-        console.log("Bem-vindo ao Scale Cash", data)
-
-        setTimeout(
-            window.location.href = 'Controlador.html'
-        ),4000
-
-    }else{
+    if (response.ok) {
+        console.log("Bem-vindo ao Scale Cash", data);
+        localStorage.setItem('token', data.token);
+    
+        setTimeout(() => {
+            window.location.href = 'Controlador.html';
+        }, 100);
+    } else {
+        console.error("Erro ao logar:", data.error);
+    
         Toastify({
-            text: "Usuário não encontrado",
+            text: data.error || "Erro ao logar",
             duration: 5000,
-            destination: "",
-            newWindow: true,
-            close: true,
             gravity: "top",
-            position: "center", 
-            stopOnFocus: true, 
+            position: "center",
+            close: true,
+            stopOnFocus: true,
             style: {
-              background: "linear-gradient(to right,rgb(206, 19, 19),rgb(188, 29, 29))"
+                background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
             },
             onClick: function(){} 
           }).showToast();
         console.error("Erro ao logar", data.error)
     }
+
+    return res.status(200).json({
+        message: "Login bem-sucedido!",
+        token
+    });
 
 
    }catch(error){

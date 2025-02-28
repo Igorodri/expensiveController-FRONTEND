@@ -114,9 +114,14 @@ input {
     border: 1px solid #ddd;
     border-radius: 5px;
 }
+.expensive_cash{
+    width: 30%;
+    text-align: center;
+}
 
-#number{
-    width: 60%;
+.expensive_spent{
+    width: 70%;
+    text-align: center;
 }
 
 .categoria{
@@ -194,8 +199,18 @@ input {
     background-color: #996619;
 }
 
+#concluir{
+    background-color: #28a745;
+    color: white;
+}
+
+#concluir{
+    background-color: #218838;
+}
+
 #date-btn{
     width: 400px;
     height: 40px;
     text-align: center;
 }
+
