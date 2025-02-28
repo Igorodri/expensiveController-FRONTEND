@@ -1,15 +1,15 @@
+//Cadastro
 async function cadastrar(username, password, confirmpassword) {
-    const userData = {
-        username: username,
-        password: password,
-        confirmpassword: confirmpassword
-    }
-
     try{
         const response = await fetch('http://localhost:3000/cadastro',{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body:JSON.stringify(userData)
+            body:JSON.stringify({
+                username: username,
+                password: password,
+                confirmpassword: confirmpassword
+            }),
+            credentials: 'include'
         });
 
         const data = await response.json();
@@ -31,7 +31,7 @@ async function cadastrar(username, password, confirmpassword) {
                 onClick: function(){} 
               }).showToast();
         }else {
-            console.error("Erro ao cadastrar usuário". data.error);
+            console.error("Erro ao cadastrar usuário", data.error);
             Toastify({
                 text: "Erro ao cadastrar usuário, tente novamente",
                 duration: 5000,

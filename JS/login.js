@@ -1,14 +1,14 @@
+//Login
 async function verificar_usuario(username, password){
-    const userData = {
-        username: username,
-        password: password
-    }
-
    try{
     const response = await fetch('http://localhost:3000/login',{
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body:JSON.stringify(userData)
+        body:JSON.stringify({
+            username: username,
+            password: password
+        }),
+        credentials: 'include'
     });
 
     const data = await response.json()

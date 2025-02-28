@@ -47,7 +47,6 @@
                         <th>Categoria de gasto</th>
                         <th>O que foi gasto</th>
                         <th>Quanto foi gasto</th>
-                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,7 +55,7 @@
                             <p>1</p>
                         </td>
                         <td>
-                            <select class="categoria">
+                            <select class="categoria" id="expensive_category">
                                 <option value="none" selected disabled></option>
                                 <option value="conta_imovel">Conta Imóvel</option>
                                 <option value="parcela">Parcela</option>
@@ -75,15 +74,9 @@
                             </select>
                             
                         </td>
-                        <td><input type="text" id="text_cash"></td>
-                        <td><input type="number" id="number"></td>
+                        <td><input type="text" id="expensive_spent"></td>
+                        <td><input type="number" id="expensive_cash"></td>
 
-                        <td class="status">
-                            <select>
-                                <option value="1" selected>Ativo</option>
-                                <option value="0">Inativo</option>
-                            </select>
-                        </td>
                     </tr>
 
                 </tbody>
@@ -98,5 +91,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="JS/controller.js"></script>
+    <script src="JS/funcionalidades.js"></script>
 </body>
 </html>

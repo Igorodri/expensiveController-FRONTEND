@@ -1,20 +1,4 @@
-const user_profile = document.getElementById("user-profile")
-const user_menu = document.getElementById("user-menu")
-
-const sair = document.getElementById("sair")
-
-user_profile.addEventListener("click", () => {
-    user_menu.style.display = user_menu.style.display === "block" ? "none" : "block";
-})
-
-
-sair.addEventListener("click", () => {
-    window.location.href ='index.html'
-
-    history.replaceState(null, null, 'index.html');
-
-})
-
+//Controller
 function add_registro() {
     const tabela = document.getElementById("table_cash").getElementsByTagName('tbody')[0];
     const newRow = tabela.insertRow();
@@ -45,16 +29,88 @@ function add_registro() {
                         </td>
                         <td><input type="text" id="text_cash"></td>
                         <td><input type="number" id="number"></td>
-
-                        <td class="status">
-                            <select>
-                                <option value="1" selected>Ativo</option>
-                                <option value="0">Inativo</option>
-                            </select>
-                        </td>
            
     `;
 }
 
-
 document.getElementById('add-btn').addEventListener("click", add_registro)
+
+
+
+
+async function save_cash(expensive_category, expensive_spent, expensive_cash) {
+    try {
+        const response = await fetch('http://localhost:3000/salvar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                expensive_category: expensive_category,
+                expensive_spent: expensive_spent,
+                expensive_cash: expensive_cash
+            }),
+            credentials: 'include'
+        });
+
+        const datas = await response.json();
+
+        if (response.ok) {
+            console.log("Registro salvo com sucesso", datas);
+
+            Toastify({
+                text: "Registros Salvos com sucesso!",
+                duration: 5000,
+                gravity: "top",
+                position: "center",
+                close: true,
+                stopOnFocus: true,
+                style: {
+                    background: "linear-gradient(to right, rgb(19, 206, 31), rgb(50, 188, 29))"
+                }
+            }).showToast();
+        } else {
+            console.error("Erro ao salvar registros", datas?.error || "Erro desconhecido");
+
+            Toastify({
+                text: datas?.error || "Erro ao salvar registros",
+                duration: 5000,
+                gravity: "top",
+                position: "center",
+                close: true,
+                stopOnFocus: true,
+                style: {
+                    background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
+                }
+            }).showToast();
+        }
+    } catch (error) {
+        console.error("Erro de conexão: ", error);
+
+        Toastify({
+            text: "Erro de conexão com o servidor",
+            duration: 5000,
+            gravity: "top",
+            position: "center",
+            close: true,
+            stopOnFocus: true,
+            style: {
+                background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
+            }
+        }).showToast();
+    }
+}
+
+
+document.getElementById("save-btn").addEventListener("click", () => {
+    const expensive_category = document.getElementById("expensive_category").value;
+    const expensive_spent = document.getElementById("expensive_spent").value;
+    const expensive_cash = document.getElementById("expensive_cash").value;
+
+    save_cash(expensive_category,expensive_spent,expensive_cash)
+
+})
+
+
+
+
+
+
