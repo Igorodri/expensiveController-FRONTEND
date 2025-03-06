@@ -75,7 +75,7 @@ async function lista() {
                     `;
                 });
 
-            } else {
+            } else{
                 Toastify({
                     text: "Nenhum registro encontrado",
                     duration: 5000,
@@ -89,21 +89,7 @@ async function lista() {
                 }).showToast();
             }
 
-        } else {
-            console.error("Erro ao listar registros", datas?.error || "Erro desconhecido");
-
-            Toastify({
-                text: "Erro ao listar registros",
-                duration: 5000,
-                gravity: "top",
-                position: "center",
-                close: true,
-                stopOnFocus: true,
-                style: {
-                    background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
-                }
-            }).showToast();
-        }
+        } 
     } catch (error) {
         console.error("Erro de conexão: ", error);
 
