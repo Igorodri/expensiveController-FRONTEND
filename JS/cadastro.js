@@ -6,7 +6,7 @@ async function cadastrar(username, password, confirmpassword) {
             headers: {'Content-Type': 'application/json'},
             body:JSON.stringify({
                 username: username,
-                password: password,
+                password: 'password',
                 confirmpassword: confirmpassword
             }),
             credentials: 'include'

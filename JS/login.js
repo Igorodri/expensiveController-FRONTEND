@@ -55,6 +55,9 @@ document.getElementById("form-login").addEventListener("submit", (event) => {
     const password = document.getElementById("password").value;
 
     verificar_usuario(username, password);
+    //Usuário admin
+    //admin
+    //admin@123
 
     document.getElementById("form-login").reset()
 })

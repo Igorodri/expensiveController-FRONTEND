@@ -199,12 +199,16 @@ input {
     background-color: #996619;
 }
 
-#concluir{
+.btn-concluir{
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
     background-color: #28a745;
     color: white;
 }
 
-#concluir{
+.btn-concluir:hover{
     background-color: #218838;
 }
 

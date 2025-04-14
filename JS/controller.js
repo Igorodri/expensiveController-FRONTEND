@@ -107,84 +107,96 @@ async function lista() {
     }
 }
 
+//Adicionar Lina
 
-//Adicionar - Em produção
-async function adicionar_cash(expensive_category, expensive_spent, expensive_cash) {
-    const token = localStorage.getItem('token')
+async function addRow() {
+    const cabecalho = document.getElementById("head-tr");
+    const tabela = document.getElementById("table_cash").getElementsByTagName('tbody')[0];
+    
+    const th = document.createElement('th');
+    th.textContent = 'Concluir';
+    cabecalho.appendChild(th);
 
-    if(!token){
-        Toastify({
-            text: "Usuário não autenticado. Faça login novamente",
-            duration: 5000,
-            gravity: "top",
-            position: "center",
-            close: true,
-            stopOnFocus: true,
-            style: {
-                background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
-            }
-        }).showToast();
-        return;
-    }
+    const newRow = tabela.insertRow();
+    newRow.innerHTML = `
+        <td><p id="expensive_id">-</p></td>
+        <td>
+            <select class="categoria" name="expensive_category">
+                <option value="none" selected disabled></option>
+                <option value="conta_imovel">Conta Imóvel</option>
+                <option value="parcela">Parcela</option>
+                <option value="alimentacao">Alimentação</option>
+                <option value="transporte">Transporte</option>
+                <option value="saude">Saúde</option>
+                <option value="educacao">Educação</option>
+                <option value="lazer">Lazer</option>
+                <option value="assinaturas">Assinaturas</option>
+                <option value="vestuario">Vestuário</option>
+                <option value="contas_energia">Conta de Energia</option>
+                <option value="contas_agua">Conta de Água</option>
+                <option value="internet">Internet</option>
+                <option value="telefone">Telefone</option>
+                <option value="outros">Outros</option>
+            </select>
+        </td>
+        <td><input type="text" class="expensive_spent"></td>
+        <td><input type="number" class="expensive_cash"></td>
+        <td><button class="btn-concluir">Concluir</button></td>
+    `;
 
-    try{
+    // Adiciona evento ao botão "Concluir"
+    newRow.querySelector('.btn-concluir').addEventListener('click', async () => {
+        const category = newRow.querySelector('.categoria').value;
+        const spent = newRow.querySelector('.expensive_spent').value;
+        const cash = newRow.querySelector('.expensive_cash').value;
+
+        const token = localStorage.getItem('token');
+
         const response = await fetch('http://localhost:3000/adicionar', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`  
             },
-        })
+            body: JSON.stringify({
+                expensive_category: category,
+                expensive_spent: spent,
+                expensive_cash: cash
+            })
+        });
 
-        const datas = await response.json();
+        const data = await response.json();
 
-        if(response.ok){
-            console.log("Adicionando Registro ao banco de dados", datas);
-
-
-
-            return res.status(200).json({message: 'Registros adicionados com sucesso!'})
-        }else{
-            console.log("Não foi possível adicionar o registro", datas.error);
-
+        if (response.ok) {
             Toastify({
-                text: "Não foi possível adicionar o registro",
-                duration: 5000,
+                text: "Registro salvo com sucesso!",
+                duration: 3000,
                 gravity: "top",
                 position: "center",
-                close: true,
-                stopOnFocus: true,
                 style: {
-                    background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
+                    background: "linear-gradient(to right, #00b09b, #96c93d)"
                 }
             }).showToast();
 
-            return res.status(401).json({error: 'Não foi possível adicionar o registro'})
+            newRow.querySelector('#expensive_id').textContent = data.data[0].id;
+            lista()
+
+        } else {
+            Toastify({
+                text: "Erro ao salvar o registro",
+                duration: 5000,
+                gravity: "top",
+                position: "center",
+                style: {
+                    background: "linear-gradient(to right, #d00000, #8e0000)"
+                }
+            }).showToast();
         }
+    });
 
-    }catch(error){
-        console.error('Erro interno no servidor');
-
-        Toastify({
-            text: "Erro interno no servidor",
-            duration: 5000,
-            gravity: "top",
-            position: "center",
-            close: true,
-            stopOnFocus: true,
-            style: {
-                background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
-            }
-        }).showToast();
-
-        return res.status(500).json({error: 'Erro interno no servidor'})
-
-    }
 }
 
-// document.getElementById('concluir').addEventListener("click", () =>{
-    
-// })
+document.getElementById("add-btn").addEventListener("click", addRow)
 
 
 verificarAutenticacao();
