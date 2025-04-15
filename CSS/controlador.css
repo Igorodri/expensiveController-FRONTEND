@@ -96,8 +96,14 @@ table {
 th, td {
     padding: 12px;
     text-align: center;
-    border-bottom: 1px solid #ddd;
+    cursor: pointer;
 }
+
+td{
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+}
+
 th {
     background-color: rgb(65, 14, 14);
     color: white;
@@ -171,12 +177,16 @@ input {
     cursor: pointer;
 }
 
-#delete-btn{
+.btn-deletar, #delete-btn{
     background-color: #ff0000;
     color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-#delete-btn:hover {
+.btn-deletar:hover, #delete-btn:hover {
     background-color: #a80000;
 }
 

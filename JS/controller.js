@@ -1,3 +1,9 @@
+//Variáveis Goblais
+const tabela = document.getElementById("table_cash").getElementsByTagName('tbody')[0];
+let controller = true;
+const cabecalho = document.getElementById("head-tr");
+const linhas = document.getElementById("table_cash").getElementsByTagName("tbody")[0].rows;
+
 //Verificação de Autenticação
 function verificarAutenticacao() {
     const token = localStorage.getItem('token'); 
@@ -41,7 +47,6 @@ async function lista() {
             console.log("Registros listados com sucesso", datas);
 
             if (datas.data && datas.data.length > 0) {
-                const tabela = document.getElementById("table_cash").getElementsByTagName('tbody')[0];
                 
                 tabela.innerHTML = '';
 
@@ -49,7 +54,7 @@ async function lista() {
                     const newRow = tabela.insertRow();
                     newRow.innerHTML = `
                         <td>
-                            <p id="expensive_id">${record.id}</p>
+                            <p class="expensive_id">${record.id}</p>
                         </td>
                         <td>
                             <select class="categoria" name="expensive_category">
@@ -107,19 +112,14 @@ async function lista() {
     }
 }
 
-//Adicionar Lina
 
+//Adicionar Linha
 async function addRow() {
-    const cabecalho = document.getElementById("head-tr");
-    const tabela = document.getElementById("table_cash").getElementsByTagName('tbody')[0];
-    
-    const th = document.createElement('th');
-    th.textContent = 'Concluir';
-    cabecalho.appendChild(th);
-
     const newRow = tabela.insertRow();
     newRow.innerHTML = `
-        <td><p id="expensive_id">-</p></td>
+        <td>
+            <p class="expensive_id"></p>
+        </td>
         <td>
             <select class="categoria" name="expensive_category">
                 <option value="none" selected disabled></option>
@@ -178,7 +178,7 @@ async function addRow() {
                 }
             }).showToast();
 
-            newRow.querySelector('#expensive_id').textContent = data.data[0].id;
+            newRow.querySelector('.expensive_id').textContent = data.data[0].id;
             lista()
 
         } else {
@@ -196,7 +196,125 @@ async function addRow() {
 
 }
 
-document.getElementById("add-btn").addEventListener("click", addRow)
+document.getElementById("add-btn").addEventListener("click", () => {
+    const th = document.createElement('th');
+    th.textContent = 'Concluir';
+
+    if(controller == true){
+        cabecalho.appendChild(th);
+        controller = false
+    }
+
+    addRow();
+})
+
+
+//Deletar registro
+async function deleteRow() {
+    const linhas = document.querySelectorAll('#table_cash tbody tr');
+
+    linhas.forEach((linha) => {
+
+        if (!linha.querySelector('.btn-deletar')) {
+            const novaCelula = linha.insertCell(-1);
+            novaCelula.innerHTML = `<button class="btn-deletar">Deletar</button>`;
+
+            const botaoDeletar = novaCelula.querySelector('.btn-deletar');
+
+            // Adiciona o evento para deletar
+            botaoDeletar.addEventListener('click', async () => {
+                const idElement = linha.querySelector('.expensive_id');
+
+                const id = parseInt(idElement.textContent, 10); 
+                    
+                const token = localStorage.getItem('token');
+
+                try {
+                    const response = await fetch('http://localhost:3000/deletar', {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                        },
+                        body: JSON.stringify({
+                            expensive_id: id,
+                        }),
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        Toastify({
+                            text: "Registro deletado com sucesso!",
+                            duration: 3000,
+                            gravity: "top",
+                            position: "center",
+                            style: {
+                                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                            },
+                        }).showToast();
+
+                        linha.remove();
+                    } else {
+                        Toastify({
+                            text: "Erro ao deletar o registro",
+                            duration: 5000,
+                            gravity: "top",
+                            position: "center",
+                            style: {
+                                background: "linear-gradient(to right, #d00000, #8e0000)",
+                            },
+                        }).showToast();
+                    }
+                } catch (error) {
+                    Toastify({
+                        text: "Erro de comunicação com o servidor",
+                        duration: 5000,
+                        gravity: "top",
+                        position: "center",
+                        style: {
+                            background: "linear-gradient(to right, #d00000, #8e0000)",
+                        },
+                    }).showToast();
+                }
+            });
+        }
+    });
+}
+
+
+
+
+document.getElementById('delete-btn').addEventListener("click", () => {
+    const th = document.createElement('th');
+    th.textContent = 'Deletar';
+
+    if (controller === true) {
+        document.querySelector('thead tr').appendChild(th);
+        controller = false;
+    }
+
+    deleteRow();
+});
+
+
+
+
+function cancelar(){
+    cabecalho.innerHTML = `
+                    <th>ID</th>
+                    <th>Categoria de gasto</th>
+                    <th>O que foi gasto</th>
+                    <th>Quanto foi gasto</th>
+    `;
+
+    lista();
+}
+
+
+
+document.getElementById("cancelar-btn").addEventListener("click", cancelar)
+
 
 
 verificarAutenticacao();
