@@ -253,22 +253,40 @@ input {
 }
 
 
-.btn-concluir{
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
+#btn-concluir {
+    position: absolute;
+    display: none;
     cursor: pointer;
-    background-color: #28a745;
+    z-index: 1000;
+    background-color: #218838;
     color: white;
+    border-radius: 50%;
+    padding: 5px;
 }
 
-.btn-concluir:hover{
-    background-color: #218838;
+#btn-concluir:hover{
+    background-color: #2eac49;
 }
 
 #date-btn{
     width: 400px;
     height: 40px;
     text-align: center;
+}
+
+
+@media (max-width: 768px) { /* Celulares médios e tablets pequenos */
+
+}
+
+@media (min-width: 769px) and (max-width: 1024px) { /* Tablets grandes e notebooks pequenos */
+
+}
+
+@media (min-width: 1025px) and (max-width: 1366px) { /* Notebooks médios e grandes */
+    table {
+        margin: 10px auto;
+        margin-bottom: 30px;
+    }
 }
 

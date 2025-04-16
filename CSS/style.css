@@ -122,3 +122,24 @@ a:hover{
     transition: 0.5s;
     color: rgb(183, 98, 98);
 }
+
+
+@media (max-width: 768px) { /* Celulares médios e tablets pequenos */
+
+}
+
+@media (min-width: 769px) and (max-width: 1024px) { /* Tablets grandes e notebooks pequenos */
+
+}
+
+@media (min-width: 1025px) and (max-width: 1366px) { /* Notebooks médios e grandes */
+    main{
+        height: 90vh;
+    }
+
+    #form-cadastro{
+        margin-top: 50px;
+    }
+    
+    
+}

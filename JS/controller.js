@@ -2,8 +2,10 @@
 const tabela = document.getElementById("table_cash").getElementsByTagName('tbody')[0];
 const btnFlutuante = document.getElementById("btn-flutuante");
 const btnDeletar = document.getElementById("btn-deletar");
+const btnConcluir = document.getElementById("btn-concluir")
 const tbody = tabela;
-let clicado = 0;
+let linhaSelecionada = null;
+let habilitado = true;
 
 
 // Verificação de Autenticação
@@ -15,31 +17,29 @@ function verificarAutenticacao() {
     }
 }
 
-// Btn Flutuante
-let linhaSelecionada = null;
+    // Btn Flutuante
+    tabela.addEventListener("click", (e) => {
+        const linha = e.target.closest("tr");
 
-tabela.addEventListener("click", (e) => {
-    const linha = e.target.closest("tr");
+        if (linha) {
+            if (linhaSelecionada === linha) {
+                btnFlutuante.style.display = "none";
+                btnDeletar.style.display = "none";
+                linhaSelecionada = null;
+            } else {
+                const rect = linha.getBoundingClientRect();
+                btnFlutuante.style.top = `${window.scrollY + rect.top + rect.height / 2 - 15}px`;
+                btnFlutuante.style.left = `${window.scrollX + rect.left - 60}px`;
+                btnFlutuante.style.display = "block";
 
-    if (linha) {
-        if (linhaSelecionada === linha) {
-            btnFlutuante.style.display = "none";
-            btnDeletar.style.display = "none";
-            linhaSelecionada = null;
-        } else {
-            const rect = linha.getBoundingClientRect();
-            btnFlutuante.style.top = `${window.scrollY + rect.top + rect.height / 2 - 15}px`;
-            btnFlutuante.style.left = `${window.scrollX + rect.left - 60}px`;
-            btnFlutuante.style.display = "block";
+                btnDeletar.style.top = `${window.scrollY + rect.top + rect.height / 2 - 15}px`;
+                btnDeletar.style.left = `${window.scrollX + rect.left - 120}px`;
+                btnDeletar.style.display = "block";
 
-            btnDeletar.style.top = `${window.scrollY + rect.top + rect.height / 2 - 15}px`;
-            btnDeletar.style.left = `${window.scrollX + rect.left - 120}px`;
-            btnDeletar.style.display = "block";
-
-            linhaSelecionada = linha;
+                linhaSelecionada = linha;
+            }
         }
-    }
-});
+    });
 
 
 
@@ -52,7 +52,7 @@ async function deleteRow() {
 
     if (!idElement) return;
 
-    const id = idElement.textContent;
+    const id = idElement.textContent.trim();
 
     try {
         const response = await fetch('http://localhost:3000/deletar', {
@@ -122,6 +122,7 @@ async function editarRow(){
 // Função para listar registros
 async function lista() {
     const token = localStorage.getItem('token');
+    habilitado = false;
 
     if (!token) {
         Toastify({
@@ -209,9 +210,11 @@ async function lista() {
     }
 }
 
+
+
 // Adicionar nova linha
 async function addRow() {
-    const newRow = tabela.insertRow();
+const newRow = tabela.insertRow();
     newRow.innerHTML = `
         <td><p class="expensive_id"></p></td>
         <td>
@@ -235,15 +238,20 @@ async function addRow() {
         </td>
         <td><input type="text" class="expensive_spent"></td>
         <td><input type="number" class="expensive_cash"></td>
-        <td><button class="btn-concluir">Concluir</button></td>
     `;
 
+        const rect = newRow.getBoundingClientRect();
+        btnConcluir.style.top = `${window.scrollY + rect.top + rect.height / 2 -15}px`;
+        btnConcluir.style.left = `${window.scrollX + rect.right + 10}px`;
+        btnConcluir.style.display = "none";
+
+        linhaSelecionada = newRow
+
     // Adiciona evento ao botão "Concluir"
-    newRow.querySelector('.btn-concluir').addEventListener('click', async () => {
+    btnConcluir.onclick = async () => {
         const category = newRow.querySelector('.categoria').value;
         const spent = newRow.querySelector('.expensive_spent').value;
         const cash = newRow.querySelector('.expensive_cash').value;
-        clicado = 0
 
         const token = localStorage.getItem('token');
 
@@ -275,6 +283,9 @@ async function addRow() {
 
             newRow.querySelector('.expensive_id').textContent = data.data[0].id;
             lista()
+            btnConcluir.style.display = "none";
+            habilitado = true;
+            linhaSelecionada = null;
         } else {
             Toastify({
                 text: "Erro ao salvar o registro",
@@ -286,20 +297,26 @@ async function addRow() {
                 }
             }).showToast();
         }
-    });
+    };
 }
 
 
 
 document.getElementById("add-btn").addEventListener("click", () => {
-    if(clicado === 1){
+    if(habilitado === false){
         lista();
-        clicado = 0
+        habilitado = true
+        btnDeletar.style.display = 'block';
+        btnFlutuante.style.display = 'block';
+        btnConcluir.style.display = "none";
     }else{
         addRow()
-        clicado = 1
-    }
-});
+        habilitado = false
+        btnDeletar.style.display = 'none';
+        btnFlutuante.style.display = 'none';
+        btnConcluir.style.display = "block";
+        }
+    });
 
 // Carrega a página
 verificarAutenticacao();
