@@ -83,6 +83,7 @@ main{
     align-items: center;
 }
 
+
 table {
     width: 80%;
     margin: 15px auto;
@@ -120,6 +121,26 @@ input {
     border: 1px solid #ddd;
     border-radius: 5px;
 }
+
+.btn-flutuante {
+    display: none;
+    position: absolute;
+    padding: 8px 12px;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    z-index: 1000;
+    cursor: pointer;
+    transition: top 0.1s ease, left 0.1s ease;
+}
+
+
+.btn-flutuante:hover{
+    background-color: #0354a5;
+}
+
+
 .expensive_cash{
     width: 30%;
     text-align: center;
@@ -201,13 +222,36 @@ input {
 }
 
 #add-btn {
-    background-color: #c98620;
+    background-color: #23c920;
+    font-size: 32px;
+    border-radius: 10px;
     color: white;
+    cursor: pointer;
+    padding: 2px;
+    margin-right: 10px;
 }
 
 #add-btn:hover {
-    background-color: #996619;
+    background-color: #158013;
 }
+
+#cancelar-btn{
+    background-color: red;
+    font-size: 32px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    padding: 2px;
+}
+
+#cancelar-btn:hover{
+    background-color: rgb(211, 0, 0);
+    font-size: 32px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+}
+
 
 .btn-concluir{
     padding: 10px 15px;

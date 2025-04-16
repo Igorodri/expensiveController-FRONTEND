@@ -1,19 +1,125 @@
-//Variáveis Goblais
+// Variáveis Globais
 const tabela = document.getElementById("table_cash").getElementsByTagName('tbody')[0];
-let controller = true;
-const cabecalho = document.getElementById("head-tr");
-const linhas = document.getElementById("table_cash").getElementsByTagName("tbody")[0].rows;
+const btnFlutuante = document.getElementById("btn-flutuante");
+const btnDeletar = document.getElementById("btn-deletar");
+const tbody = tabela;
+let clicado = 0;
 
-//Verificação de Autenticação
+
+// Verificação de Autenticação
 function verificarAutenticacao() {
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem('token');
     if (!token) {
         alert("Você precisa estar logado para acessar esta página.");
-        window.location.href = 'index.html'; 
-}
+        window.location.href = 'index.html';
+    }
 }
 
-// Lista de registros
+// Btn Flutuante
+let linhaSelecionada = null;
+
+tabela.addEventListener("click", (e) => {
+    const linha = e.target.closest("tr");
+
+    if (linha) {
+        if (linhaSelecionada === linha) {
+            btnFlutuante.style.display = "none";
+            btnDeletar.style.display = "none";
+            linhaSelecionada = null;
+        } else {
+            const rect = linha.getBoundingClientRect();
+            btnFlutuante.style.top = `${window.scrollY + rect.top + rect.height / 2 - 15}px`;
+            btnFlutuante.style.left = `${window.scrollX + rect.left - 80}px`;
+            btnFlutuante.style.display = "block";
+
+            btnDeletar.style.top = `${window.scrollY + rect.top + rect.height / 2 - 15}px`;
+            btnDeletar.style.left = `${window.scrollX + rect.left - 160}px`;
+            btnDeletar.style.display = "block";
+
+            linhaSelecionada = linha;
+        }
+    }
+});
+
+
+
+// Deletar Registro
+async function deleteRow() {
+    if (!linhaSelecionada) return;
+
+    const token = localStorage.getItem('token');
+    const idElement = linhaSelecionada.querySelector(".expensive_id");
+
+    if (!idElement) return;
+
+    const id = idElement.textContent;
+
+    try {
+        const response = await fetch('http://localhost:3000/deletar', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                expensive_id: id,
+            }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            Toastify({
+                text: "Registro deletado com sucesso!",
+                duration: 3000,
+                gravity: "top",
+                position: "center",
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                },
+            }).showToast();
+
+            linhaSelecionada.remove();
+            btnFlutuante.style.display = "none";
+            btnDeletar.style.display = "none";
+        } else {
+            Toastify({
+                text: data.message || "Erro ao deletar o registro",
+                duration: 5000,
+                gravity: "top",
+                position: "center",
+                style: {
+                    background: "linear-gradient(to right, #d00000, #8e0000)",
+                },
+            }).showToast();
+        }
+    } catch (error) {
+        Toastify({
+            text: "Erro de comunicação com o servidor",
+            duration: 5000,
+            gravity: "top",
+            position: "center",
+            style: {
+                background: "linear-gradient(to right, #d00000, #8e0000)",
+            },
+        }).showToast();
+    }
+}
+
+// Vincula a função ao botão deletar
+btnDeletar.addEventListener("click", deleteRow);
+
+
+
+//Função para Editar Registros
+async function editarRow(){
+    if(!linhaSelecionada) return;
+
+
+}
+
+
+// Função para listar registros
 async function lista() {
     const token = localStorage.getItem('token');
 
@@ -23,8 +129,6 @@ async function lista() {
             duration: 5000,
             gravity: "top",
             position: "center",
-            close: true,
-            stopOnFocus: true,
             style: {
                 background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
             }
@@ -35,9 +139,9 @@ async function lista() {
     try {
         const response = await fetch('http://localhost:3000/lista', {
             method: 'GET',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`  
+                'Authorization': `Bearer ${token}`
             },
         });
 
@@ -47,7 +151,6 @@ async function lista() {
             console.log("Registros listados com sucesso", datas);
 
             if (datas.data && datas.data.length > 0) {
-                
                 tabela.innerHTML = '';
 
                 datas.data.forEach(record => {
@@ -75,26 +178,22 @@ async function lista() {
                                 <option value="outros" class="expensive_category" ${record.expensive_category === 'outros' ? 'selected' : ''}>Outros</option>
                             </select>
                         </td>
-                        <td><input type="text" class="expensive_spent"  value="${record.expensive_spent}"></td>
+                        <td><input type="text" class="expensive_spent" value="${record.expensive_spent}"></td>
                         <td><input type="number" class="expensive_cash" value="${record.expensive_cash}"></td>
                     `;
                 });
-
-            } else{
+            } else {
                 Toastify({
                     text: "Nenhum registro encontrado",
                     duration: 5000,
                     gravity: "top",
                     position: "center",
-                    close: true,
-                    stopOnFocus: true,
                     style: {
                         background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
                     }
                 }).showToast();
             }
-
-        } 
+        }
     } catch (error) {
         console.error("Erro de conexão: ", error);
 
@@ -103,8 +202,6 @@ async function lista() {
             duration: 5000,
             gravity: "top",
             position: "center",
-            close: true,
-            stopOnFocus: true,
             style: {
                 background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
             }
@@ -112,14 +209,11 @@ async function lista() {
     }
 }
 
-
-//Adicionar Linha
+// Adicionar nova linha
 async function addRow() {
     const newRow = tabela.insertRow();
     newRow.innerHTML = `
-        <td>
-            <p class="expensive_id"></p>
-        </td>
+        <td><p class="expensive_id"></p></td>
         <td>
             <select class="categoria" name="expensive_category">
                 <option value="none" selected disabled></option>
@@ -149,6 +243,7 @@ async function addRow() {
         const category = newRow.querySelector('.categoria').value;
         const spent = newRow.querySelector('.expensive_spent').value;
         const cash = newRow.querySelector('.expensive_cash').value;
+        clicado = 0
 
         const token = localStorage.getItem('token');
 
@@ -156,7 +251,7 @@ async function addRow() {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`  
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
                 expensive_category: category,
@@ -180,7 +275,6 @@ async function addRow() {
 
             newRow.querySelector('.expensive_id').textContent = data.data[0].id;
             lista()
-
         } else {
             Toastify({
                 text: "Erro ao salvar o registro",
@@ -193,136 +287,20 @@ async function addRow() {
             }).showToast();
         }
     });
-
 }
+
+
 
 document.getElementById("add-btn").addEventListener("click", () => {
-    const th = document.createElement('th');
-    th.textContent = 'Concluir';
-
-    if(controller == true){
-        cabecalho.appendChild(th);
-        controller = false
+    if(clicado === 1){
+        lista();
+        clicado = 0
+    }else{
+        addRow()
+        clicado = 1
     }
-
-    addRow();
-})
-
-
-//Deletar registro
-async function deleteRow() {
-    const linhas = document.querySelectorAll('#table_cash tbody tr');
-
-    linhas.forEach((linha) => {
-
-        if (!linha.querySelector('.btn-deletar')) {
-            const novaCelula = linha.insertCell(-1);
-            novaCelula.innerHTML = `<button class="btn-deletar">Deletar</button>`;
-
-            const botaoDeletar = novaCelula.querySelector('.btn-deletar');
-
-            // Adiciona o evento para deletar
-            botaoDeletar.addEventListener('click', async () => {
-                const idElement = linha.querySelector('.expensive_id');
-
-                const id = parseInt(idElement.textContent, 10); 
-                    
-                const token = localStorage.getItem('token');
-
-                try {
-                    const response = await fetch('http://localhost:3000/deletar', {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`,
-                        },
-                        body: JSON.stringify({
-                            expensive_id: id,
-                        }),
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        Toastify({
-                            text: "Registro deletado com sucesso!",
-                            duration: 3000,
-                            gravity: "top",
-                            position: "center",
-                            style: {
-                                background: "linear-gradient(to right, #00b09b, #96c93d)",
-                            },
-                        }).showToast();
-
-                        linha.remove();
-                    } else {
-                        Toastify({
-                            text: "Erro ao deletar o registro",
-                            duration: 5000,
-                            gravity: "top",
-                            position: "center",
-                            style: {
-                                background: "linear-gradient(to right, #d00000, #8e0000)",
-                            },
-                        }).showToast();
-                    }
-                } catch (error) {
-                    Toastify({
-                        text: "Erro de comunicação com o servidor",
-                        duration: 5000,
-                        gravity: "top",
-                        position: "center",
-                        style: {
-                            background: "linear-gradient(to right, #d00000, #8e0000)",
-                        },
-                    }).showToast();
-                }
-            });
-        }
-    });
-}
-
-
-
-
-document.getElementById('delete-btn').addEventListener("click", () => {
-    const th = document.createElement('th');
-    th.textContent = 'Deletar';
-
-    if (controller === true) {
-        document.querySelector('thead tr').appendChild(th);
-        controller = false;
-    }
-
-    deleteRow();
 });
 
-
-
-
-function cancelar(){
-    cabecalho.innerHTML = `
-                    <th>ID</th>
-                    <th>Categoria de gasto</th>
-                    <th>O que foi gasto</th>
-                    <th>Quanto foi gasto</th>
-    `;
-
-    lista();
-}
-
-
-
-document.getElementById("cancelar-btn").addEventListener("click", cancelar)
-
-
-
+// Carrega a página
 verificarAutenticacao();
 lista();
-
-
-
-
-
-
-

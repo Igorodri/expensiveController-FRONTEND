@@ -6,6 +6,8 @@
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
     <link rel="shortcut icon" href="IMG/logo.png" type="image/x-icon">
     <title>Scale Cash</title>
 </head>
@@ -30,27 +32,39 @@
         <main>
 
             <div class="btns">
-                <div>
-                    <button class="btn" id="add-btn">Adicionar Registro</button>
-                    <button class="btn" id="delete-btn">Deletar</button>
-                    <button class="btn" id="cancelar-btn">Cancelar</button>
-                </div>
+                <div> 
+                    <span class="material-symbols-outlined" id="add-btn"> 
+                        add
+                    </span>
 
+                </div>
             </div>
 
-            <table id="table_cash">
-                <thead>
-                    <tr id="head-tr">
-                        <th>ID</th>
-                        <th>Categoria de gasto</th>
-                        <th>O que foi gasto</th>
-                        <th>Quanto foi gasto</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <span class="material-symbols-outlined btn-flutuante" id="btn-flutuante"> 
+                edit
+            </span>
 
-                </tbody>
-            </table>
+            <span class="material-symbols-outlined btn-flutuante btn-deletar" id="btn-deletar">
+                delete
+            </span>
+            
+            <button id="btn-deletar" class="btn-flutuante btn-deletar">Deletar</button>
+
+                <table id="table_cash">
+                    <thead>
+                        <tr id="head-tr">
+                            <th>ID</th>
+                            <th>Categoria de gasto</th>
+                            <th>O que foi gasto</th>
+                            <th>Quanto foi gasto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    
+                    </tbody>
+                </table>
+            </section>
+           
         
         </main>
 
