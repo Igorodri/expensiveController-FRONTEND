@@ -29,11 +29,11 @@ tabela.addEventListener("click", (e) => {
         } else {
             const rect = linha.getBoundingClientRect();
             btnFlutuante.style.top = `${window.scrollY + rect.top + rect.height / 2 - 15}px`;
-            btnFlutuante.style.left = `${window.scrollX + rect.left - 80}px`;
+            btnFlutuante.style.left = `${window.scrollX + rect.left - 60}px`;
             btnFlutuante.style.display = "block";
 
             btnDeletar.style.top = `${window.scrollY + rect.top + rect.height / 2 - 15}px`;
-            btnDeletar.style.left = `${window.scrollX + rect.left - 160}px`;
+            btnDeletar.style.left = `${window.scrollX + rect.left - 120}px`;
             btnDeletar.style.display = "block";
 
             linhaSelecionada = linha;

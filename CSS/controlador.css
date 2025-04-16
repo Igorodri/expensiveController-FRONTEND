@@ -124,6 +124,7 @@ input {
 
 .btn-flutuante {
     display: none;
+    top: -9900px;
     position: absolute;
     padding: 8px 12px;
     background-color: #0066cc;
@@ -132,7 +133,6 @@ input {
     border-radius: 5px;
     z-index: 1000;
     cursor: pointer;
-    transition: top 0.1s ease, left 0.1s ease;
 }
 
 
@@ -201,7 +201,7 @@ input {
 .btn-deletar, #delete-btn{
     background-color: #ff0000;
     color: white;
-    padding: 10px 15px;
+    padding: 8px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
