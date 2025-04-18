@@ -18,7 +18,7 @@ function verificarAutenticacao() {
 }
 
     // Btn Flutuante
-    tabela.addEventListener("click", (e) => {
+    tabela.addEventListener("mouseover", (e) => {
         const linha = e.target.closest("tr");
 
         if (linha) {
@@ -39,6 +39,12 @@ function verificarAutenticacao() {
                 linhaSelecionada = linha;
             }
         }
+    });
+
+    tabela.addEventListener("mouseleave", () => {
+        btnDeletar.style.display = "none";
+        btnFlutuante.style.display = "none";
+        linhaSelecionada = null;
     });
 
 
@@ -122,7 +128,6 @@ async function editarRow(){
 // Função para listar registros
 async function lista() {
     const token = localStorage.getItem('token');
-    habilitado = false;
 
     if (!token) {
         Toastify({
@@ -283,7 +288,6 @@ const newRow = tabela.insertRow();
 
             newRow.querySelector('.expensive_id').textContent = data.data[0].id;
             lista()
-            btnConcluir.style.display = "none";
             habilitado = true;
             linhaSelecionada = null;
         } else {
@@ -306,14 +310,10 @@ document.getElementById("add-btn").addEventListener("click", () => {
     if(habilitado === false){
         lista();
         habilitado = true
-        btnDeletar.style.display = 'block';
-        btnFlutuante.style.display = 'block';
         btnConcluir.style.display = "none";
     }else{
         addRow()
         habilitado = false
-        btnDeletar.style.display = 'none';
-        btnFlutuante.style.display = 'none';
         btnConcluir.style.display = "block";
         }
     });
