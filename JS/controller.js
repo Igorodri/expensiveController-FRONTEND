@@ -18,7 +18,7 @@ function verificarAutenticacao() {
 }
 
     // Btn Flutuante
-    tabela.addEventListener("mouseover", (e) => {
+    tabela.addEventListener("click", (e) => {
         const linha = e.target.closest("tr");
 
         if (linha) {
@@ -40,13 +40,6 @@ function verificarAutenticacao() {
             }
         }
     });
-
-    tabela.addEventListener("mouseleave", () => {
-        btnDeletar.style.display = "none";
-        btnFlutuante.style.display = "none";
-        linhaSelecionada = null;
-    });
-
 
 
 // Deletar Registro
@@ -290,6 +283,7 @@ const newRow = tabela.insertRow();
             lista()
             habilitado = true;
             linhaSelecionada = null;
+            btnConcluir.style.display = 'none'
         } else {
             Toastify({
                 text: "Erro ao salvar o registro",
@@ -311,6 +305,9 @@ document.getElementById("add-btn").addEventListener("click", () => {
         lista();
         habilitado = true
         btnConcluir.style.display = "none";
+        btnFlutuante.style.display = "none";
+        btnDeletar.style.display = "none";
+        linhaSelecionada = null;
     }else{
         addRow()
         habilitado = false
