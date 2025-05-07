@@ -28,6 +28,31 @@ header{
     border-radius: 20px;
 }
 
+header nav ul{
+    margin-top: 10%;
+    display: flex;
+    justify-content: center;
+    list-style: none;
+}
+
+header nav ul a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+header nav ul a:hover{
+    color: rgb(212, 211, 211);
+    transition: 0.2s;
+}
+
+header nav ul a li{
+    margin: 0px 15px 0px 15px;
+}
+
+
+
 .opcoes{
     display: flex;
     justify-content: center;
@@ -140,6 +165,9 @@ input {
     background-color: #0354a5;
 }
 
+.td-expensive_id{
+    display: none;
+}
 
 .expensive_cash{
     width: 30%;
@@ -189,6 +217,43 @@ input {
     justify-content: space-between;
     align-items: center;
     margin-top: 20px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.lancamentos{
+    display: flex;
+    align-items: center;
+}
+
+.lancamentos p{
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.date{
+    display: flex;
+}
+
+.date div{
+    margin: 0px 15px 0px 15px;
+}
+
+.date #mesAno{
+    margin-top: 13px;
+    min-width: 150px;
+    text-align: center;
+}
+
+.date button{
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    border: 1px solid black;
+    font-weight: bold;
+    font-size: 20px;
 }
 
 .btn {

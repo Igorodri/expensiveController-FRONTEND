@@ -155,7 +155,7 @@ async function lista() {
                 datas.data.forEach(record => {
                     const newRow = tabela.insertRow();
                     newRow.innerHTML = `
-                        <td>
+                        <td class="td-expensive_id">
                             <p class="expensive_id">${record.id}</p>
                         </td>
                         <td>
@@ -214,7 +214,7 @@ async function lista() {
 async function addRow() {
 const newRow = tabela.insertRow();
     newRow.innerHTML = `
-        <td><p class="expensive_id"></p></td>
+        <td class="td-expensive_id"><p class="expensive_id"></p></td>
         <td>
             <select class="categoria" name="expensive_category">
                 <option value="none" selected disabled></option>

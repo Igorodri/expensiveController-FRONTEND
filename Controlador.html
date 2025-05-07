@@ -17,6 +17,14 @@
                 <img src="IMG/logo.png" alt="Logo Empresa">
             </div>
 
+            <nav>
+                <ul>
+                    <a href="geral.html"><li>Visão Geral</li></a>
+                    <a href="Controlador.html"><li>Lançamentos</li></a>
+                    <a href="relatorio.html"><li>Relatórios</li></a>
+                </ul>
+            </nav>
+
             <div class="opcoes">
                 <div class="user">
                     <img src="IMG/user.svg" alt="User" id="user-profile">
@@ -32,12 +40,23 @@
         <main>
 
             <div class="btns">
-                <div> 
+                <div class="lancamentos"> 
+                    <p>Lançamentos</p>
                     <span class="material-symbols-outlined" id="add-btn"> 
                         add
                     </span>
+                </div>
+
+                <div class="date">
+                    <button id="anteriorMes"><</button>
+                    <div id="mesAno"></div>
+                    <button id="avancarMes">></button>
 
                 </div>
+
+
+
+
             </div>
 
             <span class="material-symbols-outlined btn-flutuante" id="btn-flutuante"> 
@@ -59,7 +78,6 @@
                 <table id="table_cash">
                     <thead>
                         <tr id="head-tr">
-                            <th>ID</th>
                             <th>Categoria de gasto</th>
                             <th>O que foi gasto</th>
                             <th>Quanto foi gasto</th>
