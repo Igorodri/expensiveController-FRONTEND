@@ -6,6 +6,7 @@ const btnConcluir = document.getElementById("btn-concluir")
 const tbody = tabela;
 let linhaSelecionada = null;
 let habilitado = true;
+let habilitadoEdicao = false;
 
 
 // Verificação de Autenticação
@@ -21,23 +22,25 @@ function verificarAutenticacao() {
     tabela.addEventListener("click", (e) => {
         const linha = e.target.closest("tr");
 
-        if (linha) {
-            if (linhaSelecionada === linha) {
-                btnFlutuante.style.display = "none";
-                btnDeletar.style.display = "none";
-                linhaSelecionada = null;
-            } else {
-                const rect = linha.getBoundingClientRect();
-                btnFlutuante.style.top = `${window.scrollY + rect.top + rect.height / 2 - 15}px`;
-                btnFlutuante.style.left = `${window.scrollX + rect.left - 60}px`;
-                btnFlutuante.style.display = "block";
+        const rect = linha.getBoundingClientRect();
+        btnFlutuante.style.top = `${window.scrollY + rect.top + rect.height / 2 - 15}px`;
+        btnFlutuante.style.left = `${window.scrollX + rect.left - 60}px`;
+        btnFlutuante.style.display = "block";
 
-                btnDeletar.style.top = `${window.scrollY + rect.top + rect.height / 2 - 15}px`;
-                btnDeletar.style.left = `${window.scrollX + rect.left - 120}px`;
-                btnDeletar.style.display = "block";
+        btnDeletar.style.top = `${window.scrollY + rect.top + rect.height / 2 - 15}px`;
+        btnDeletar.style.left = `${window.scrollX + rect.left - 120}px`;
+        btnDeletar.style.display = "block";
 
-                linhaSelecionada = linha;
-            }
+        linhaSelecionada = linha;
+    
+    });
+
+    document.querySelector("body").addEventListener("click", (e) => {
+        const clicouForaDaTabela = !tabela.contains(e.target);
+    
+        if (clicouForaDaTabela) {
+            btnFlutuante.style.display = "none";
+            btnDeletar.style.display = "none";
         }
     });
 
@@ -81,6 +84,7 @@ async function deleteRow() {
             linhaSelecionada.remove();
             btnFlutuante.style.display = "none";
             btnDeletar.style.display = "none";
+
         } else {
             Toastify({
                 text: data.message || "Erro ao deletar o registro",
@@ -93,6 +97,7 @@ async function deleteRow() {
             }).showToast();
         }
     } catch (error) {
+        console.log(error)
         Toastify({
             text: "Erro de comunicação com o servidor",
             duration: 5000,
@@ -109,13 +114,35 @@ async function deleteRow() {
 btnDeletar.addEventListener("click", deleteRow);
 
 
+function habilitarEdicao() {
+    const categoria = document.querySelectorAll(".categoria");
+    const expensive_cash = document.querySelectorAll(".expensive_cash");
+    const expensive_spent = document.querySelectorAll(".expensive_spent");
+
+    const arrayInput = [categoria, expensive_cash, expensive_spent];
+
+    arrayInput.forEach(inputList => {
+        inputList.forEach(input => {
+            if (!habilitadoEdicao) {
+                input.removeAttribute("disabled");
+            } else {
+                input.setAttribute("disabled", true);       
+            }
+        });
+    });
+
+    // Inverte o estado
+    habilitadoEdicao = !habilitadoEdicao;
+}
 
 //Função para Editar Registros
 async function editarRow(){
-    if(!linhaSelecionada) return;
-
+    habilitarEdicao();
 
 }
+
+btnFlutuante.addEventListener("click", editarRow);
+
 
 
 // Função para listar registros
@@ -159,7 +186,7 @@ async function lista() {
                             <p class="expensive_id">${record.id}</p>
                         </td>
                         <td>
-                            <select class="categoria" name="expensive_category">
+                            <select class="categoria" name="expensive_category" disabled>
                                 <option value="none" class="expensive_category" selected disabled></option>
                                 <option value="conta_imovel" class="expensive_category" ${record.expensive_category === 'conta_imovel' ? 'selected' : ''}>Conta Imóvel</option>
                                 <option value="parcela" class="expensive_category" ${record.expensive_category === 'parcela' ? 'selected' : ''}>Parcela</option>
@@ -177,8 +204,8 @@ async function lista() {
                                 <option value="outros" class="expensive_category" ${record.expensive_category === 'outros' ? 'selected' : ''}>Outros</option>
                             </select>
                         </td>
-                        <td><input type="text" class="expensive_spent" value="${record.expensive_spent}"></td>
-                        <td><input type="number" class="expensive_cash" value="${record.expensive_cash}"></td>
+                        <td><input type="text" class="expensive_spent" disabled value="${record.expensive_spent}"></td>
+                        <td><input type="number" class="expensive_cash" disabled value="${record.expensive_cash}"></td>
                     `;
                 });
             } else {

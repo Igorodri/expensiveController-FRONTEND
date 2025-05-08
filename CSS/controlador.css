@@ -140,12 +140,25 @@ tr:hover {
     background-color: #f1f1f1;
 }
 
-input {
-    width: 100%;
+input, select{
+    width: 50%;
     padding: 5px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    background-color: white;
+    color: #000;
+    opacity: 1; 
+    cursor: default; 
 }
+
+input:disabled, select:disabled{
+    border: 1px solid #ddd;
+    background-color: white;
+    color: #000;
+    opacity: 1; 
+} 
+
+
 
 .btn-flutuante {
     display: none;
@@ -337,6 +350,10 @@ input {
     width: 400px;
     height: 40px;
     text-align: center;
+}
+
+.desabilitado{
+    cursor:not-allowed
 }
 
 
