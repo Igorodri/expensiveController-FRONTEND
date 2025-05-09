@@ -2,7 +2,8 @@
 const tabela = document.getElementById("table_cash").getElementsByTagName('tbody')[0];
 const btnFlutuante = document.getElementById("btn-flutuante");
 const btnDeletar = document.getElementById("btn-deletar");
-const btnConcluir = document.getElementById("btn-concluir")
+const btnConcluir = document.getElementById("btn-concluir");
+const btnConcluirEdicao = document.getElementById("btn-concluir-editar");
 const tbody = tabela;
 let linhaSelecionada = null;
 let habilitado = true;
@@ -21,19 +22,25 @@ function verificarAutenticacao() {
     // Btn Flutuante
     tabela.addEventListener("click", (e) => {
         const linha = e.target.closest("tr");
+        if (!linha) return;
+    
+        const idElement = linha.querySelector(".expensive_id");
+        const id = idElement ? idElement.textContent.trim() : null;
 
+        if (!id) return;
+    
         const rect = linha.getBoundingClientRect();
         btnFlutuante.style.top = `${window.scrollY + rect.top + rect.height / 2 - 15}px`;
         btnFlutuante.style.left = `${window.scrollX + rect.left - 60}px`;
         btnFlutuante.style.display = "block";
-
+    
         btnDeletar.style.top = `${window.scrollY + rect.top + rect.height / 2 - 15}px`;
         btnDeletar.style.left = `${window.scrollX + rect.left - 120}px`;
         btnDeletar.style.display = "block";
-
-        linhaSelecionada = linha;
     
+        linhaSelecionada = linha;
     });
+    
 
     document.querySelector("body").addEventListener("click", (e) => {
         const clicouForaDaTabela = !tabela.contains(e.target);
@@ -41,6 +48,7 @@ function verificarAutenticacao() {
         if (clicouForaDaTabela) {
             btnFlutuante.style.display = "none";
             btnDeletar.style.display = "none";
+            btnConcluirEdicao.style.display = "none";
         }
     });
 
@@ -114,34 +122,121 @@ async function deleteRow() {
 btnDeletar.addEventListener("click", deleteRow);
 
 
-function habilitarEdicao() {
-    const categoria = document.querySelectorAll(".categoria");
-    const expensive_cash = document.querySelectorAll(".expensive_cash");
-    const expensive_spent = document.querySelectorAll(".expensive_spent");
+function habilitarEdicao(linha) {
+    if (!linha) return;
 
-    const arrayInput = [categoria, expensive_cash, expensive_spent];
+    const categoria = linha.querySelector(".categoria");
+    const expensive_cash = linha.querySelector(".expensive_cash");
+    const expensive_spent = linha.querySelector(".expensive_spent");
 
-    arrayInput.forEach(inputList => {
-        inputList.forEach(input => {
-            if (!habilitadoEdicao) {
-                input.removeAttribute("disabled");
-            } else {
-                input.setAttribute("disabled", true);       
-            }
-        });
+    const campos = [categoria, expensive_cash, expensive_spent];
+
+    campos.forEach(input => {
+        if (!habilitadoEdicao) {
+            input.removeAttribute("disabled");
+
+            const rect = linha.getBoundingClientRect();
+            btnConcluirEdicao.style.top = `${window.scrollY + rect.top + rect.height / 2 - 15}px`;
+            btnConcluirEdicao.style.left = `${window.scrollX + rect.right + 10}px`;
+            btnConcluirEdicao.style.display = "block";
+
+        } else {
+            input.setAttribute("disabled", true);
+            btnConcluirEdicao.style.display = "none";
+            linhaSelecionada = null
+        }
     });
 
-    // Inverte o estado
     habilitadoEdicao = !habilitadoEdicao;
 }
 
-//Função para Editar Registros
-async function editarRow(){
-    habilitarEdicao();
+btnFlutuante.addEventListener("click", (e) => {
+    if (linha) {
+        habilitarEdicao(linha);
+    }
+});
 
+
+
+//Função para Editar Registros
+async function editarRow() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        Toastify({
+            text: "Usuário não autenticado. Faça login novamente",
+            duration: 5000,
+            gravity: "top",
+            position: "center",
+            style: {
+                background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
+            }
+        }).showToast();
+        return;
+    }
+
+    try{
+       const response = await fetch('http://localhost:3000/editar', {
+            method : 'PUT',
+            headers : {
+                'Content-type' : 'application/json',
+                'Authorization' : `Bearer ${token}`
+            },
+
+            body: JSON.stringify({
+                expensive_id: id,
+                expensive_category: category,
+                expensive_spent: spent,
+                expensive_cash: cash,
+                userId : userId
+            })
+       });
+
+       if (response.ok) {
+        Toastify({
+            text: "Registro editado com sucesso!",
+            duration: 3000,
+            gravity: "top",
+            position: "center",
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)"
+            }
+        }).showToast();
+
+        lista()
+        btnConcluirEdicao.style.display = 'none';
+        btnDeletar.style.display = 'none';
+        btnFlutuante.style.display = 'none';
+    } else {
+        Toastify({
+            text: "Erro ao editar o registro",
+            duration: 5000,
+            gravity: "top",
+            position: "center",
+            style: {
+                background: "linear-gradient(to right, #d00000, #8e0000)"
+            }
+        }).showToast();
+    }
+
+    }catch(error){
+        console.error("Erro de conexão: ", error);
+
+        Toastify({
+            text: "Erro de conexão com o servidor",
+            duration: 5000,
+            gravity: "top",
+            position: "center",
+            style: {
+                background: "linear-gradient(to right, rgb(206, 19, 19), rgb(188, 29, 29))"
+            }
+        }).showToast();
+    }
 }
 
-btnFlutuante.addEventListener("click", editarRow);
+
+
+btnConcluirEdicao.addEventListener("click", editarRow);
 
 
 
@@ -169,6 +264,7 @@ async function lista() {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
+            
         });
 
         const datas = await response.json();

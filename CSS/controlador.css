@@ -286,7 +286,7 @@ input:disabled, select:disabled{
 }
 
 .btn-deletar:hover, #delete-btn:hover {
-    background-color: #a80000;
+    background-color: #d40000;
 }
 
 
@@ -331,9 +331,8 @@ input:disabled, select:disabled{
 }
 
 
-#btn-concluir {
+.btn-concluir{
     position: absolute;
-    display: none;
     cursor: pointer;
     z-index: 1000;
     background-color: #218838;
@@ -342,9 +341,34 @@ input:disabled, select:disabled{
     padding: 5px;
 }
 
-#btn-concluir:hover{
+#btn-concluir{
+    display: none;
+}
+
+.btn-concluir-edicao{
+    position: absolute;
+    cursor: pointer;
+    z-index: 1000;
+    background-color: #0066cc;
+    color: white;
+    border-radius: 50%;
+    padding: 5px;
+}
+
+
+#btn-concluir-editar{
+    display: none;
+}
+
+
+.btn-concluir:hover{
     background-color: #2eac49;
 }
+
+.btn-concluir-edicao:hover{
+    background-color: #0354a5;
+}
+
 
 #date-btn{
     width: 400px;
